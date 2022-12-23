@@ -17,17 +17,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var mawu = StringBuilder()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
         binding.apply {
-            splashViewModel = viewModel
-            newCharacters.setOnClickListener {
-                viewModel.getButtonLetter()
+
+            viewModel.apply {
+                finalAnswer.observe(this@MainActivity){
+                        value ->  answer.text  = value
+                }
+
+                letter1.observe(this@MainActivity){
+                    value -> buttonA.text = value
+                }
+                letter2.observe(this@MainActivity){
+                        value -> buttonB.text = value
+                }
+                letter3.observe(this@MainActivity){
+                        value -> buttonC.text = value
+                }
+                letter4.observe(this@MainActivity){
+                        value -> buttonD.text = value
+                }
+                letter5.observe(this@MainActivity){
+                        value -> buttonE.text = value
+                }
             }
+            splashViewModel = viewModel
 
             getAnswerFromButton(buttonA)
             getAnswerFromButton(buttonB)
