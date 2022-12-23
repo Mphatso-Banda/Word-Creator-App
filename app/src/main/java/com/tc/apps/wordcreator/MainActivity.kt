@@ -12,7 +12,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -23,22 +22,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
         binding.apply {
-            buttonA.setOnClickListener {
-                mawu.append(getLetter(buttonA)) }
-            splashViewModel = viewModel
-            }
+            getAnswerFromButton(buttonA)
+            getAnswerFromButton(buttonB)
+            getAnswerFromButton(buttonC)
+            getAnswerFromButton(buttonD)
+            getAnswerFromButton(buttonE)
 
+            newCharacters.setOnClickListener {
+                viewModel.getButtonLetter()
+            }
         }
 
+    }
+
+    //Getting the letter of the button
     private fun getLetter(btn: Button): String{
         return btn.text.toString()
     }
 
-    private fun checkWord(mawu: String): Boolean{
-        return true
+    private fun getAnswerFromButton(btn: Button){
+        btn.setOnClickListener {
+            viewModel.answer(getLetter(btn))
+        }
     }
+
+
 }
 
 

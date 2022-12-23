@@ -61,7 +61,7 @@ class SplashViewModel() : ViewModel() {
 //        val mapString = mapKey.toString()
 //        Log.d("ViewModel", mapKey[0])
         return mapKey[0]
-    }
+   }
 
     fun answer(s: String) {
         answer.append(s)
