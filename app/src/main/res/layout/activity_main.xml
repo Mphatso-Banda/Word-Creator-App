@@ -78,7 +78,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
-            android:text="@{splashViewModel.finalAnswer}"
+            android:text="Answer"
             android:textSize="28dp"
             android:textStyle="bold" />
 
@@ -106,7 +106,7 @@
             android:layout_height="64dp"
             android:background="@drawable/round_btn_bg"
             android:layout_margin="10dp"
-            android:text="@{splashViewModel.letter1}"
+            android:text="@{splashViewModel.firstLetter}"
             android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
