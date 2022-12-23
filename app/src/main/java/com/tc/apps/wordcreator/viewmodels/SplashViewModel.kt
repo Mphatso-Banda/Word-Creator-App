@@ -84,7 +84,7 @@ class SplashViewModel() : ViewModel() {
         if(!correctWords.contains(ans)){
             if(words.contains(ans)){
                 //Correct word
-                _finalAnswer.value = ""
+                reset()
                 correctWords.add(ans)
             }
         }
