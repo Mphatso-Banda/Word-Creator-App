@@ -35,6 +35,7 @@ class SplashViewModel() : ViewModel() {
     fun getButtonLetter() {
         reset()
         val nextWord = shuffleWord()
+        Log.d("Next", nextWord[0].toString())
 
         _letter1.value = nextWord[0].toString()
         _letter2.value = nextWord[1].toString()
@@ -48,7 +49,7 @@ class SplashViewModel() : ViewModel() {
     private fun shuffleWord(): CharArray {
         val word = getData().toCharArray()
         word.shuffle()
-        Log.d("SPLASH", word[0].toString())
+        Log.d("NOTHING", word[0].toString())
         return word
     }
 
@@ -65,7 +66,9 @@ class SplashViewModel() : ViewModel() {
 
     fun answer(s: String) {
         answer.append(s)
+
         _finalAnswer.value = answer.toString()
+        Log.d("Answer", finalAnswer.value.toString())
     }
 
     private fun reset(){

@@ -3,6 +3,7 @@ package com.tc.apps.wordcreator
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
 import com.tc.apps.wordcreator.viewmodels.SplashViewModel
@@ -23,21 +24,25 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.apply {
+            splashViewModel = viewModel
+            newCharacters.setOnClickListener {
+                viewModel.getButtonLetter()
+            }
+
             getAnswerFromButton(buttonA)
             getAnswerFromButton(buttonB)
             getAnswerFromButton(buttonC)
             getAnswerFromButton(buttonD)
             getAnswerFromButton(buttonE)
 
-            newCharacters.setOnClickListener {
-                viewModel.getButtonLetter()
-            }
+
         }
 
     }
 
     //Getting the letter of the button
     private fun getLetter(btn: Button): String{
+        Log.d("Button", btn.text.toString())
         return btn.text.toString()
     }
 
