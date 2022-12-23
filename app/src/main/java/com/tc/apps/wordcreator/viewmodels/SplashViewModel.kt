@@ -33,6 +33,7 @@ class SplashViewModel() : ViewModel() {
     val answer = StringBuilder()
 
     fun getButtonLetter() {
+        reset()
         val nextWord = shuffleWord()
 
         _letter1.value = nextWord[0].toString()
