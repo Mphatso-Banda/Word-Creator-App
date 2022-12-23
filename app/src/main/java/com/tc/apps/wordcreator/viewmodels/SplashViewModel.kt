@@ -30,7 +30,7 @@ class SplashViewModel() : ViewModel() {
     private val _finalAnswer = MutableLiveData<String>()
     val finalAnswer: LiveData<String> get() = _finalAnswer
 
-    val answer = StringBuilder()
+    private val answer = StringBuilder()
 
     fun getButtonLetter() {
         reset()
