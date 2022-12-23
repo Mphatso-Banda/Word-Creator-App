@@ -8,6 +8,8 @@ import com.tc.apps.wordcreator.WordsContainer
 
 class SplashViewModel() : ViewModel() {
     private val wordsContainer = WordsContainer()
+    private var words = listOf<String>()
+    private val correctWords = mutableListOf<String>()
 
     private val _score = MutableLiveData<Int>()
     val score: LiveData<Int> get() = _score
@@ -59,8 +61,9 @@ class SplashViewModel() : ViewModel() {
 
         val randomMap = word.random()
         val mapKey = randomMap.map { it.key }
-//        val mapString = mapKey.toString()
-//        Log.d("ViewModel", mapKey[0])
+
+        val mapValue = randomMap.map { it.value }
+        words = mapValue[0]
         return mapKey[0]
    }
 
@@ -74,6 +77,17 @@ class SplashViewModel() : ViewModel() {
     private fun reset(){
         answer.clear()
         _finalAnswer.value = ""
+    }
+
+    //Checking if word is correct
+    private fun checkCorrect(ans: String){
+        if(!correctWords.contains(ans)){
+            if(words.contains(ans)){
+                //Correct word
+                _finalAnswer.value = ""
+                correctWords.add(ans)
+            }
+        }
     }
 
     init {

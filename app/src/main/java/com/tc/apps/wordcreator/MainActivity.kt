@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
 
 
         }
-
     }
 
     //Getting the letter of the button
@@ -46,12 +45,12 @@ class MainActivity : AppCompatActivity() {
         return btn.text.toString()
     }
 
+    //General function to set the actions for the buttons
     private fun getAnswerFromButton(btn: Button){
         btn.setOnClickListener {
             viewModel.answer(getLetter(btn))
         }
     }
-
 
 }
 
