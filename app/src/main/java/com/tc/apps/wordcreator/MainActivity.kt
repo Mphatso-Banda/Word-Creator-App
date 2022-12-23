@@ -4,7 +4,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.widget.Button
+import android.widget.Toast
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
 import com.tc.apps.wordcreator.viewmodels.SplashViewModel
 
@@ -63,8 +66,18 @@ class MainActivity : AppCompatActivity() {
     //General function to set the actions for the buttons
     private fun getAnswerFromButton(btn: Button){
         btn.setOnClickListener {
-            viewModel.answer(getLetter(btn))
+            if(viewModel.answer(getLetter(btn))){
+                alert()
+            }
+
         }
+    }
+
+    private fun alert(){
+        val toast = Toast.makeText(this, "congrats", Toast.LENGTH_LONG)
+        toast.setGravity(Gravity.TOP,0,0)
+        toast.show()
+
     }
 
 }

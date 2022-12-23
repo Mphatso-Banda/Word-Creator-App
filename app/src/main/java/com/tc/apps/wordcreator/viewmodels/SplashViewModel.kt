@@ -1,10 +1,14 @@
 package com.tc.apps.wordcreator.viewmodels
 
 import android.util.Log
+import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.tc.apps.wordcreator.MainActivity
 import com.tc.apps.wordcreator.WordsContainer
+import java.util.*
 
 class SplashViewModel() : ViewModel() {
     private val wordsContainer = WordsContainer()
@@ -40,6 +44,7 @@ class SplashViewModel() : ViewModel() {
 
     fun getButtonLetter() {
         reset()
+        correctWords.clear()
         val nextWord = shuffleWord()
         Log.d("_LETTER1", nextWord[0].toString())
 
@@ -74,27 +79,35 @@ class SplashViewModel() : ViewModel() {
         return mapKey[0]
    }
 
-    fun answer(s: String) {
+    fun answer(s: String) : Boolean {
         answer.append(s)
 
         _finalAnswer.value = answer.toString()
         Log.d("Answer", finalAnswer.value.toString())
+
+        if(!correctWords.contains(answer.toString().toLowerCase())){
+            if(words.contains(answer.toString().toLowerCase())){
+                //Correct word
+                return true
+
+                Log.d("Check Ans", "Correct Word Sucka!")
+                reset()
+                correctWords.add(answer.toString().toLowerCase())
+            }
+            else{
+                Log.d("Check Ans", "Wapala Sucka!")
+                return false
+            }
+        }else{
+            Log.d("Check Ans", "Ilimo kale!")
+            return false
+        }
     }
 
-    private fun reset(){
+    private fun reset() {
         answer.clear()
         _finalAnswer.value = ""
-    }
 
-    //Checking if word is correct
-    private fun checkCorrect(ans: String){
-        if(!correctWords.contains(ans)){
-            if(words.contains(ans)){
-                //Correct word
-                reset()
-                correctWords.add(ans)
-            }
-        }
     }
 
     init {
