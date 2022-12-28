@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
 import com.tc.apps.wordcreator.viewmodels.SplashViewModel
@@ -29,21 +31,12 @@ class MainActivity : AppCompatActivity() {
                         value ->  answer.text  = value
                 }
 
-                letter1.observe(this@MainActivity){
-                    value -> buttonA.text = value
-                }
-                letter2.observe(this@MainActivity){
-                        value -> buttonB.text = value
-                }
-                letter3.observe(this@MainActivity){
-                        value -> buttonC.text = value
-                }
-                letter4.observe(this@MainActivity){
-                        value -> buttonD.text = value
-                }
-                letter5.observe(this@MainActivity){
-                        value -> buttonE.text = value
-                }
+                setTextToButtons(letter1, buttonA)
+                setTextToButtons(letter2, buttonB)
+                setTextToButtons(letter3, buttonC)
+                setTextToButtons(letter4, buttonD)
+                setTextToButtons(letter5, buttonE)
+
             }
             splashViewModel = viewModel
 
@@ -53,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             getAnswerFromButton(buttonD)
             getAnswerFromButton(buttonE)
 
-
+            newCharacters.setOnClickListener { viewModel.getButtonLetter() }
         }
     }
 
@@ -78,6 +71,12 @@ class MainActivity : AppCompatActivity() {
         toast.setGravity(Gravity.TOP,0,0)
         toast.show()
 
+    }
+
+    private fun setTextToButtons(liveData: LiveData<String>, btn: Button){
+        liveData.observe(this@MainActivity){
+            value -> btn.text = value
+        }
     }
 
 }

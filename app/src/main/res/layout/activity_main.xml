@@ -40,10 +40,10 @@
                 android:id="@+id/new_characters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Characters"
-                android:onClick="@{()-> splashViewModel.getButtonLetter()}"
+                android:layout_centerVertical="true"
                 android:layout_margin="20dp"
-                android:layout_centerVertical="true" />
+                android:onClick="@{()-> splashViewModel.getButtonLetter()}"
+                android:text="New Characters" />
 
             <TextView
                 android:layout_width="wrap_content"
