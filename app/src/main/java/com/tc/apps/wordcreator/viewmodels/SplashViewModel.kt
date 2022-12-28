@@ -16,7 +16,7 @@ class SplashViewModel() : ViewModel() {
     private var words = listOf<String>()
     private val correctWords = mutableListOf<String>()
 
-    private val _score = MutableLiveData<Int>()
+    private val _score = MutableLiveData<Int>(0)
     val score: LiveData<Int> get() = _score
 
     private val _letter1 = MutableLiveData<String>()
