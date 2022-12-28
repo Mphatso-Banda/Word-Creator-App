@@ -111,18 +111,25 @@ class MainActivity : AppCompatActivity() {
     //checkAnswer
     private fun checkAnswer(){
         if(viewModel.checkAnswer()){
-            alert()
+            correctAlert()
             for (button in buttons){
                 enableButton(button)
             }
         }
         else{
-
+            failedAlert()
         }
     }
 
-    private fun alert(){
-        val toast = Toast.makeText(this, "congrats", Toast.LENGTH_LONG)
+    private fun correctAlert(){
+        val toast = Toast.makeText(this, "Congrats", Toast.LENGTH_LONG)
+        toast.setGravity(Gravity.TOP,0,0)
+        toast.show()
+
+    }
+
+    private fun failedAlert(){
+        val toast = Toast.makeText(this, "Failed", Toast.LENGTH_LONG)
         toast.setGravity(Gravity.TOP,0,0)
         toast.show()
 
