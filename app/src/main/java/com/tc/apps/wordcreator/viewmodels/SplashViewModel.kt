@@ -80,20 +80,25 @@ class SplashViewModel() : ViewModel() {
         return mapKey[0]
    }
 
-    fun answer(s: String) : Boolean {
+    fun answer(s: String){
         answer.append(s)
 
         _finalAnswer.value = answer.toString()
         Log.d("Answer", finalAnswer.value.toString())
 
-        if(!correctWords.contains(answer.toString().toLowerCase())){
-            if(words.contains(answer.toString().toLowerCase())){
+
+    }
+
+    fun checkAnswer():Boolean{
+        Log.d("Check Ans", "$correctWords[]")
+        if(!correctWords.contains(answer.toString().lowercase(Locale.ROOT))){
+            if(words.contains(answer.toString().lowercase(Locale.ROOT))){
                 //Correct word
-                return true
 
                 Log.d("Check Ans", "Correct Word Sucka!")
                 reset()
-                correctWords.add(answer.toString().toLowerCase())
+                correctWords.add(answer.toString().lowercase(Locale.ROOT))
+                return true
             }
             else{
                 Log.d("Check Ans", "Wapala Sucka!")
@@ -103,6 +108,15 @@ class SplashViewModel() : ViewModel() {
             Log.d("Check Ans", "Ilimo kale!")
             return false
         }
+    }
+
+    fun clearLetter(){
+
+    }
+    fun clearAnswer():Boolean{
+        answer.clear()
+        _finalAnswer.value = ""
+        return true
     }
 
     private fun reset() {

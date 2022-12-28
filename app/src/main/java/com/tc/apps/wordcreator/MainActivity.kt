@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.apply {
+            splashViewModel = viewModel
 
             buttons.add(buttonA)
             buttons.add(buttonB)
@@ -47,8 +48,18 @@ class MainActivity : AppCompatActivity() {
                 setTextToButtons(letter5, buttonE)
 
             }
-            splashViewModel = viewModel
 
+            checkBtn?.setOnClickListener {
+                checkAnswer()
+            }
+            clearBtn?.apply {
+                setOnClickListener{
+
+                }
+                setOnLongClickListener {
+                    viewModel.clearAnswer()
+                }
+            }
             for (button in buttons){
                 getAnswerFromButton(button)
             }
@@ -77,10 +88,16 @@ class MainActivity : AppCompatActivity() {
     //General function to set the actions for the buttons
     private fun getAnswerFromButton(btn: Button){
         btn.setOnClickListener {
-            if(viewModel.answer(getLetter(btn))){
-                alert()
-            }
+            viewModel.answer(getLetter(btn))
             btn.isEnabled = false
+        }
+    }
+
+    //checkAnswer
+    private fun checkAnswer(){
+        if(viewModel.checkAnswer()){
+            alert()
+//            TODO("Add score")
         }
     }
 
