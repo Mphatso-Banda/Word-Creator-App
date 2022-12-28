@@ -107,10 +107,16 @@ class SplashViewModel() : ViewModel() {
         }
     }
 
-    fun clearLetter(){
+    fun clearLetter() : String?{
+        var s: String? = null
         if(answer.isNotEmpty()){
+            s = answer[answer.length - 1].toString()
             answer = StringBuilder(answer.substring(0, answer.length -1))
             _finalAnswer.value = answer.toString()
+            return s
+        }
+        else{
+            return s
         }
     }
     fun clearAnswer():Boolean{

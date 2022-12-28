@@ -53,7 +53,20 @@ class MainActivity : AppCompatActivity() {
 
             clearBtn.apply {
                 setOnClickListener{
-                    viewModel.clearLetter()
+                    val s = viewModel.clearLetter()
+                    for(button in buttons){
+                        if(s != null){
+                            if(button.text == s){
+                                if(button.isEnabled){
+                                    button.isEnabled = true
+                                }
+                                else{
+                                    button.isEnabled = true
+                                    break
+                                }
+                            }
+                        }
+                    }
                 }
                 setOnLongClickListener {
                     for (button in buttons){
@@ -99,7 +112,12 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(){
         if(viewModel.checkAnswer()){
             alert()
-//            TODO("Add score")
+            for (button in buttons){
+                enableButton(button)
+            }
+        }
+        else{
+
         }
     }
 
