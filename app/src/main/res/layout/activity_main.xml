@@ -42,7 +42,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_margin="20dp"
-                android:onClick="@{()-> splashViewModel.getButtonLetter()}"
                 android:text="New Characters" />
 
             <TextView

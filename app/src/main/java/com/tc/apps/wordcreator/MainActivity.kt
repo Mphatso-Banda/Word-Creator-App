@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: SplashViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
 
+    private val buttons = mutableListOf<Button>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,10 +28,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.apply {
 
+            buttons.add(buttonA)
+            buttons.add(buttonB)
+            buttons.add(buttonC)
+            buttons.add(buttonD)
+            buttons.add(buttonE)
+
             viewModel.apply {
                 finalAnswer.observe(this@MainActivity){
                         value ->  answer.text  = value
                 }
+
 
                 setTextToButtons(letter1, buttonA)
                 setTextToButtons(letter2, buttonB)
@@ -40,13 +49,17 @@ class MainActivity : AppCompatActivity() {
             }
             splashViewModel = viewModel
 
-            getAnswerFromButton(buttonA)
-            getAnswerFromButton(buttonB)
-            getAnswerFromButton(buttonC)
-            getAnswerFromButton(buttonD)
-            getAnswerFromButton(buttonE)
+            for (button in buttons){
+                getAnswerFromButton(button)
+            }
 
-            newCharacters.setOnClickListener { viewModel.getButtonLetter() }
+            newCharacters.setOnClickListener {
+                viewModel.getButtonLetter()
+                for(button in buttons){
+                    enableButton(button)
+                }
+
+            }
         }
     }
 
@@ -56,13 +69,18 @@ class MainActivity : AppCompatActivity() {
         return btn.text.toString()
     }
 
+    //reset button state
+    private fun enableButton(btn: Button){
+        btn.isEnabled = true
+    }
+
     //General function to set the actions for the buttons
     private fun getAnswerFromButton(btn: Button){
         btn.setOnClickListener {
             if(viewModel.answer(getLetter(btn))){
                 alert()
             }
-
+            btn.isEnabled = false
         }
     }
 
