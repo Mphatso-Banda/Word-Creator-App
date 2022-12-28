@@ -106,10 +106,10 @@
             android:layout_alignParentStart="true"
             android:background="@drawable/text_bg"
             android:padding="5dp"
+            android:textColor="@color/design_default_color_primary_dark"
             android:text="@{splashViewModel.getText()}"
             android:layout_marginBottom="10dp"
             android:textSize="28dp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
@@ -122,30 +122,31 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clear_btn" />
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
 
-        <Button
-            android:id="@+id/clear_btn"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_marginTop="20dp"
-            android:text="Clear"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.332"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/answer" />
+            app:layout_constraintTop_toBottomOf="@+id/answer">
 
-        <Button
-            android:id="@+id/check_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="20dp"
-            android:layout_marginTop="20dp"
-            android:text="Check"
-            app:layout_constraintStart_toEndOf="@+id/clear_btn"
-            app:layout_constraintTop_toBottomOf="@+id/answer" />
+            <Button
+                android:id="@+id/clear_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="Clear" />
+
+            <Button
+                android:id="@+id/check_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="20dp"
+                android:text="Check" />
+        </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
