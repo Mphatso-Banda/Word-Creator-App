@@ -3,7 +3,7 @@ package com.tc.apps.wordcreator
 class WordsContainer {
 
     var list = mutableListOf<Map<String, List<String>>>()
-    val map2 = mapOf("DENDP" to listOf<String>("depend","deep","end"))
+    val map2 = mapOf("DENEP" to listOf<String>("depend","deep","end","den"))
     val map3 = mapOf("EVNTS" to listOf<String>("events","eve","ten","seven","see","sent"))
     init {
         list.add(map2)

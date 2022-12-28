@@ -124,7 +124,7 @@
             app:layout_constraintStart_toEndOf="@+id/constraintLayout" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/clear_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -133,13 +133,13 @@
             app:layout_constraintTop_toBottomOf="@+id/answer" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/check_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:layout_marginStart="48dp"
             android:text="Check"
-            app:layout_constraintStart_toEndOf="@+id/button2"
+            app:layout_constraintStart_toEndOf="@+id/clear_btn"
             app:layout_constraintTop_toBottomOf="@+id/answer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

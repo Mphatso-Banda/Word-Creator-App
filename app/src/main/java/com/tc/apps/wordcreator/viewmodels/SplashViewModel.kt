@@ -82,10 +82,8 @@ class SplashViewModel() : ViewModel() {
 
     fun answer(s: String){
         answer.append(s)
-
         _finalAnswer.value = answer.toString()
         Log.d("Answer", finalAnswer.value.toString())
-
 
     }
 
@@ -115,7 +113,6 @@ class SplashViewModel() : ViewModel() {
             answer = StringBuilder(answer.substring(0, answer.length -1))
             _finalAnswer.value = answer.toString()
         }
-
     }
     fun clearAnswer():Boolean{
         answer.clear()
@@ -128,6 +125,7 @@ class SplashViewModel() : ViewModel() {
         _finalAnswer.value = ""
 
     }
+
 
     init {
         getButtonLetter()

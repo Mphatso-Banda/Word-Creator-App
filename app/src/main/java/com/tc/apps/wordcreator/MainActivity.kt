@@ -49,10 +49,11 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            checkBtn?.setOnClickListener {
+            checkBtn.setOnClickListener {
                 checkAnswer()
             }
-            clearBtn?.apply {
+
+            clearBtn.apply {
                 setOnClickListener{
                     viewModel.clearLetter()
                 }
