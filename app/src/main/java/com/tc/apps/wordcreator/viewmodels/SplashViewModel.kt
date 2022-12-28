@@ -37,7 +37,7 @@ class SplashViewModel() : ViewModel() {
     private val _finalAnswer = MutableLiveData<String>()
     val finalAnswer: LiveData<String> get() = _finalAnswer
 
-    private val answer = StringBuilder()
+    private var answer = StringBuilder()
 
     fun getText():LiveData<String>{
         return finalAnswer
@@ -111,6 +111,10 @@ class SplashViewModel() : ViewModel() {
     }
 
     fun clearLetter(){
+        if(answer.isNotEmpty()){
+            answer = StringBuilder(answer.substring(0, answer.length -1))
+            _finalAnswer.value = answer.toString()
+        }
 
     }
     fun clearAnswer():Boolean{
