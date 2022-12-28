@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tc.apps.wordcreator.MainActivity
 import com.tc.apps.wordcreator.WordsContainer
-import com.tc.apps.wordcreator.databinding.ActivityMainBinding
 import java.util.*
 
 class SplashViewModel() : ViewModel() {

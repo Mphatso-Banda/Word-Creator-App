@@ -40,13 +40,11 @@ class MainActivity : AppCompatActivity() {
                         value ->  answer.text  = value
                 }
 
-
                 setTextToButtons(letter1, buttonA)
                 setTextToButtons(letter2, buttonB)
                 setTextToButtons(letter3, buttonC)
                 setTextToButtons(letter4, buttonD)
                 setTextToButtons(letter5, buttonE)
-
             }
 
             checkBtn.setOnClickListener {
@@ -58,6 +56,9 @@ class MainActivity : AppCompatActivity() {
                     viewModel.clearLetter()
                 }
                 setOnLongClickListener {
+                    for (button in buttons){
+                        enableButton(button)
+                    }
                     viewModel.clearAnswer()
                 }
             }
