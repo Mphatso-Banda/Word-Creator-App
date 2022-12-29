@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: SplashViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
 
-    private val buttons = mutableListOf<Button>()
+    private var buttonsMap = mapOf<LiveData<String>, Button>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,26 +27,29 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.apply {
             splashViewModel = viewModel
-
-            buttons.add(buttonA)
-            buttons.add(buttonB)
-            buttons.add(buttonC)
-            buttons.add(buttonD)
-            buttons.add(buttonE)
 
             viewModel.apply {
                 finalAnswer.observe(this@MainActivity){
                         value ->  answer.text  = value
                 }
 
-                setTextToButtons(letter1, buttonA)
-                setTextToButtons(letter2, buttonB)
-                setTextToButtons(letter3, buttonC)
-                setTextToButtons(letter4, buttonD)
-                setTextToButtons(letter5, buttonE)
+                buttonsMap += mapOf(letter1 to buttonA, letter2 to buttonB, letter3 to buttonC,
+                    letter4 to buttonD, letter5 to buttonE, letter6 to buttonF, letter7 to buttonG,
+                    letter8 to buttonH, letter9 to buttonI)
+
+                buttonsMap.map { it.key to it.value }.shuffled().toMap()
+                setButtonState()
+
+                score.observe(this@MainActivity){
+                    value -> binding.score.text = "Score: ${value.toString()}"
+                }
             }
+
+
+
 
             checkBtn.setOnClickListener {
                 checkAnswer()
@@ -54,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             clearBtn.apply {
                 setOnClickListener{
                     val s = viewModel.clearLetter()
-                    for(button in buttons){
+                    for((liveData, button) in buttonsMap){
                         if(s != null){
                             if(button.text == s){
                                 if(button.isEnabled){
@@ -69,20 +73,32 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 setOnLongClickListener {
-                    for (button in buttons){
-                        enableButton(button)
-                    }
+                    enableButton(buttonsMap)
                     viewModel.clearAnswer()
                 }
             }
-            for (button in buttons){
+            for ((liveData, button) in buttonsMap){
                 getAnswerFromButton(button)
             }
 
             newCharacters.setOnClickListener {
                 viewModel.getButtonLetter()
-                for(button in buttons){
-                    enableButton(button)
+                enableButton(buttonsMap)
+                setButtonState()
+            }
+        }
+
+    }
+
+    private fun setButtonState(){
+        viewModel.apply {
+            for ((liveData, button) in buttonsMap){
+                if(liveData.value != null){
+                    setTextToButtons(liveData, button)
+                    button.isVisible = true
+                }
+                else{
+                    button.isVisible = false
                 }
 
             }
@@ -96,8 +112,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     //reset button state
-    private fun enableButton(btn: Button){
-        btn.isEnabled = true
+    private fun enableButton(map: Map<LiveData<String>, Button>){
+        for ((liveData, button) in map){
+            button.isEnabled = true
+        }
     }
 
     //General function to set the actions for the buttons
@@ -112,9 +130,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(){
         if(viewModel.checkAnswer()){
             correctAlert()
-            for (button in buttons){
-                enableButton(button)
-            }
+            enableButton(buttonsMap)
         }
         else{
             failedAlert()

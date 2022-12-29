@@ -14,6 +14,9 @@ class SplashViewModel() : ViewModel() {
     private val wordsContainer = WordsContainer()
     private var words = listOf<String>()
     private val correctWords = mutableListOf<String>()
+    private var scoreCount = 0
+
+    private var listOfLetters = mutableListOf<MutableLiveData<String>>()
 
     private val _score = MutableLiveData<Int>(0)
     val score: LiveData<Int> get() = _score
@@ -33,6 +36,20 @@ class SplashViewModel() : ViewModel() {
     private val _letter5 = MutableLiveData<String>()
     val letter5: LiveData<String> get() = _letter5
 
+    private val _letter6 = MutableLiveData<String>()
+    val letter6: LiveData<String> get() = _letter6
+
+    private val _letter7 = MutableLiveData<String>()
+    val letter7: LiveData<String> get() = _letter7
+
+    private val _letter8 = MutableLiveData<String>()
+    val letter8: LiveData<String> get() = _letter8
+
+    private val _letter9 = MutableLiveData<String>()
+    val letter9: LiveData<String> get() = _letter9
+
+
+
     private val _finalAnswer = MutableLiveData<String>()
     val finalAnswer: LiveData<String> get() = _finalAnswer
 
@@ -46,16 +63,16 @@ class SplashViewModel() : ViewModel() {
         reset()
         correctWords.clear()
         val nextWord = shuffleWord()
-        Log.d("_LETTER1", nextWord[0].toString())
 
-        _letter1.value = nextWord[0].toString()
-        Log.d("LETTER1", letter1.value.toString())
+        for((position, letter) in listOfLetters.shuffled().withIndex()){
 
-        _letter2.value = nextWord[1].toString()
-        _letter3.value = nextWord[2].toString()
-        _letter4.value = nextWord[3].toString()
-        _letter5.value = nextWord[4].toString()
-
+            if(position < nextWord.size){
+                letter.value = nextWord[position].toString()
+            }
+            else{
+                letter.value = null
+            }
+        }
     }
 
     // shuffle the word
@@ -89,17 +106,19 @@ class SplashViewModel() : ViewModel() {
     fun checkAnswer():Boolean{
         Log.d("Check Ans", "$correctWords[]")
         if(!correctWords.contains(answer.toString().lowercase(Locale.ROOT))){
-            if(words.contains(answer.toString().lowercase(Locale.ROOT))){
+            return if(words.contains(answer.toString().lowercase(Locale.ROOT))){
                 //Correct word
 
                 Log.d("Check Ans", "Correct Word Sucka!")
-                reset()
+                scoreCount += answer.length
+                _score.value = scoreCount
                 correctWords.add(answer.toString().lowercase(Locale.ROOT))
-                return true
-            }
-            else{
+                Log.d("score", score.value.toString())
+                reset()
+                true
+            } else{
                 Log.d("Check Ans", "Wapala Sucka!")
-                return false
+                false
             }
         }else{
             Log.d("Check Ans", "Ilimo kale!")
@@ -109,14 +128,13 @@ class SplashViewModel() : ViewModel() {
 
     fun clearLetter() : String?{
         var s: String? = null
-        if(answer.isNotEmpty()){
+        return if(answer.isNotEmpty()){
             s = answer[answer.length - 1].toString()
             answer = StringBuilder(answer.substring(0, answer.length -1))
             _finalAnswer.value = answer.toString()
-            return s
-        }
-        else{
-            return s
+            s
+        } else{
+            s
         }
     }
     fun clearAnswer():Boolean{
@@ -131,8 +149,12 @@ class SplashViewModel() : ViewModel() {
 
     }
 
+    private fun addButtonsToList(){
+        listOfLetters += mutableListOf(_letter1, _letter2, _letter3, _letter4, _letter5, _letter6, _letter7, _letter8, _letter9)
+    }
 
     init {
+        addButtonsToList()
         getButtonLetter()
 //        shuffleWord()
     }
