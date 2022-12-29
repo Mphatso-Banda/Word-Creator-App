@@ -3,6 +3,7 @@ package com.tc.apps.wordcreator
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.Gravity
 import android.view.View
