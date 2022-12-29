@@ -35,7 +35,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/konza_liwu_2_" />
+                app:srcCompat="@drawable/vanilla_1s_266px" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

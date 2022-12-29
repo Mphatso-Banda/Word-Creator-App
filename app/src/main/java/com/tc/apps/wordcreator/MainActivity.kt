@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 if(liveData.value != null){
                     setTextToButtons(liveData, button)
                     button.isVisible = true
-                    val randColor = Color(255, (0..256).random(), (0..256).random(), (0..256).random()).toArgb()
+                    val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
                     button.setBackgroundColor(randColor)
                 }
                 else{

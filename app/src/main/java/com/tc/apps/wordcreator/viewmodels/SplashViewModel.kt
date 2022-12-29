@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tc.apps.wordcreator.SplashScreen
 import com.tc.apps.wordcreator.WordsContainer
 import java.util.*
 
@@ -12,6 +13,7 @@ class SplashViewModel() : ViewModel() {
     private var words = listOf<String>()
     private val correctWords = mutableListOf<String>()
     private var scoreCount = 0
+    private var dictionary = mutableListOf<String>()
 
     private var listOfLetters = mutableListOf<MutableLiveData<String>>()
 
@@ -126,13 +128,15 @@ class SplashViewModel() : ViewModel() {
                 //Correct word
 
                 Log.d("Check Ans", "Correct Word Sucka!")
-                scoreCount += answer.length
-                _score.value = scoreCount
-                correctWords.add(answer.toString().lowercase(Locale.ROOT))
+                increasePoints()
                 Log.d("score", score.value.toString())
                 reset()
                 true
             } else{
+                if(dictionary.contains(answer.toString())){
+                    increasePoints()
+                    true
+                }
                 Log.d("Check Ans", "Wapala Sucka!")
                 false
             }
@@ -169,9 +173,16 @@ class SplashViewModel() : ViewModel() {
         listOfLetters += mutableListOf(_letter1, _letter2, _letter3, _letter4, _letter5, _letter6, _letter7, _letter8, _letter9)
     }
 
+    private fun increasePoints(){
+        scoreCount += answer.length
+        _score.value = scoreCount
+        correctWords.add(answer.toString().lowercase(Locale.ROOT))
+    }
+
     init {
         addButtonsToList()
         getButtonLetter()
+        dictionary = SplashScreen.getDictionary()
         btnList += listOf(letter1,letter2, letter3, letter4, letter5)
 //        shuffleWord()
     }

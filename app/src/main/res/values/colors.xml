@@ -15,6 +15,7 @@
     <color name="indigo_light">#FF7a7cff</color>
     <color name="dark_scheme">#FF000051</color>
     <color name="light">#FFFFFFFF</color>
+    <color name="dark_color">#ACA9A9</color>
 
 
 </resources>
