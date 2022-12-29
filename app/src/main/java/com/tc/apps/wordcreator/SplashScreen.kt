@@ -17,7 +17,6 @@ class SplashScreen : AppCompatActivity() {
 
         var imageView = findViewById<ImageView>(R.id.imageView2) as ImageView
 
-        imageView.alpha = 0f
         imageView.animate().setDuration(1500).alpha(1f).withEndAction{
             WordsDictionary.initializeDictionary(this)
             val intent = Intent(this, MainActivity::class.java)
