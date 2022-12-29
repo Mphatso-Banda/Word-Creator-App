@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 app:columnCount="3"
                 app:rowCount="3"
+                android:animateLayoutChanges="true"
                 android:layout_marginTop="@dimen/layout_margin"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

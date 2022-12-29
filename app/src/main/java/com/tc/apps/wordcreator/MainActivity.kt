@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.Toast
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -47,9 +50,6 @@ class MainActivity : AppCompatActivity() {
                     value -> binding.score.text = "Score: ${value.toString()}"
                 }
             }
-
-
-
 
             checkBtn.setOnClickListener {
                 checkAnswer()
@@ -96,6 +96,8 @@ class MainActivity : AppCompatActivity() {
                 if(liveData.value != null){
                     setTextToButtons(liveData, button)
                     button.isVisible = true
+                    val randColor = Color(255, (0..256).random(), (0..256).random(), (0..256).random()).toArgb()
+                    button.setBackgroundColor(randColor)
                 }
                 else{
                     button.isVisible = false

@@ -1,12 +1,9 @@
 package com.tc.apps.wordcreator.viewmodels
 
 import android.util.Log
-import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.tc.apps.wordcreator.MainActivity
 import com.tc.apps.wordcreator.WordsContainer
 import java.util.*
 
@@ -20,6 +17,13 @@ class SplashViewModel() : ViewModel() {
 
     private val _score = MutableLiveData<Int>(0)
     val score: LiveData<Int> get() = _score
+
+    //TODO("Testing umaziwa")
+    fun LiveData<String>.state(txt: String, boo: Boolean): Boolean {
+        val useLess = this.hasActiveObservers()
+        getBtnToDealWith(txt)
+        return boo
+    }
 
     private val _letter1 = MutableLiveData<String>()
     val letter1: LiveData<String> get() = _letter1
@@ -55,8 +59,20 @@ class SplashViewModel() : ViewModel() {
 
     private var answer = StringBuilder()
 
+    private val btnList = mutableListOf<LiveData<String>>()
+
     fun getText():LiveData<String>{
         return finalAnswer
+    }
+
+    //TODO("done already")
+    fun getBtnToDealWith(txt: String){
+        for ((position, letter) in btnList.withIndex()){
+            if (letter.value == txt){
+                Log.d("Get Position", btnList[position].toString())
+            }else
+                Log.d("Get Position", "mbola man $position")
+        }
     }
 
     fun getButtonLetter() {
@@ -156,6 +172,7 @@ class SplashViewModel() : ViewModel() {
     init {
         addButtonsToList()
         getButtonLetter()
+        btnList += listOf(letter1,letter2, letter3, letter4, letter5)
 //        shuffleWord()
     }
 }
