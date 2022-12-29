@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.WordCreator" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/indigo_light</item>
-        <item name="colorPrimaryVariant">@color/teal_light</item>
+        <item name="colorPrimary">@color/light_green_500</item>
+        <item name="colorPrimaryVariant">@color/light_green_200</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/indigo</item>
-        <item name="colorSecondaryVariant">@color/indigo_light</item>
+        <item name="colorSecondary">@color/lime_500</item>
+        <item name="colorSecondaryVariant">@color/lime_200</item>
         <item name="colorOnSecondary">@color/dark_scheme</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>

@@ -86,6 +86,8 @@ class MainActivity : AppCompatActivity() {
                 viewModel.getButtonLetter()
                 enableButton(buttonsMap)
                 setButtonState()
+                val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
+                newCharacters.setBackgroundColor(randColor)
             }
         }
 
