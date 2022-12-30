@@ -137,8 +137,9 @@ class SplashViewModel() : ViewModel() {
                     increasePoints()
                     true
                 }
-                Log.d("Check Ans", "Wapala Sucka!")
-                false
+                else{
+                    false
+                }
             }
         }else{
             Log.d("Check Ans", "Ilimo kale!")
@@ -170,7 +171,8 @@ class SplashViewModel() : ViewModel() {
     }
 
     private fun addButtonsToList(){
-        listOfLetters += mutableListOf(_letter1, _letter2, _letter3, _letter4, _letter5, _letter6, _letter7, _letter8, _letter9)
+        listOfLetters += mutableListOf(_letter1, _letter2, _letter3, _letter4,
+            _letter5, _letter6, _letter7, _letter8, _letter9)
     }
 
     private fun increasePoints(){

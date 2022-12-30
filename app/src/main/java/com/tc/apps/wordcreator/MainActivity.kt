@@ -1,5 +1,6 @@
 package com.tc.apps.wordcreator
 
+import android.media.MediaPlayer
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -24,11 +25,19 @@ class MainActivity : AppCompatActivity() {
 
     private var buttonsMap = mapOf<LiveData<String>, Button>()
 
+    private var media = MediaPlayer()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        media = MediaPlayer.create(this, R.raw.game_music)
+        media.start()
+
+        media.setOnCompletionListener {
+            media.start()
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -94,6 +103,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        if(media.isPlaying){
+            media.pause()
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!media.isPlaying){
+            media.start()
+        }
+
+    }
     private fun setButtonState(){
         viewModel.apply {
             for ((liveData, button) in buttonsMap){
@@ -161,6 +185,10 @@ class MainActivity : AppCompatActivity() {
         liveData.observe(this@MainActivity){
             value -> btn.text = value
         }
+    }
+
+    private fun startPlaying(){
+
     }
 
 }
