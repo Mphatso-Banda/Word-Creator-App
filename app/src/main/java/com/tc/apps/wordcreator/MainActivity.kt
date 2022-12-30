@@ -35,9 +35,10 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             splashViewModel = viewModel
 
+
             viewModel.apply {
                 finalAnswer.observe(this@MainActivity){
-                        value ->  answer.text  = value
+                        value ->  answer.setText(value)
                 }
 
                 buttonsMap += mapOf(letter1 to buttonA, letter2 to buttonB, letter3 to buttonC,

@@ -157,22 +157,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <TextView
+        <EditText
             android:id="@+id/answer"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="152dp"
             android:background="@drawable/text_bg"
-            android:padding="5dp"
+            android:focusable="false"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingEnd="20dp"
+
             android:text="@{splashViewModel.getText()}"
             android:textColor="@color/design_default_color_primary_dark"
             android:textSize="28dp"
             app:layout_constraintBottom_toTopOf="@+id/new_characters"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
 
         <Button
             android:id="@+id/new_characters"
