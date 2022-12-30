@@ -1,5 +1,6 @@
 package com.tc.apps.wordcreator
 
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.media.MediaPlayer
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -24,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private var buttonsMap = mapOf<LiveData<String>, Button>()
+
+    private lateinit var imgVector: ImageView
 
     private var media = MediaPlayer()
 
@@ -44,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             splashViewModel = viewModel
 
+            imgVector = imageVector
 
             viewModel.apply {
                 finalAnswer.observe(this@MainActivity){
@@ -100,6 +105,7 @@ class MainActivity : AppCompatActivity() {
                 newCharacters.setBackgroundColor(randColor)
             }
         }
+        imgVector.isVisible = false
 
     }
 
@@ -161,6 +167,14 @@ class MainActivity : AppCompatActivity() {
         if(viewModel.checkAnswer()){
             correctAlert()
             enableButton(buttonsMap)
+
+            imgVector.isVisible = true
+            val anime: AnimatedVectorDrawable = imgVector.drawable as AnimatedVectorDrawable
+            anime.start()
+            imgVector.animate().setDuration(2000).alpha(1f).withEndAction{
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                imgVector.isVisible = false
+            }
         }
         else{
             failedAlert()
