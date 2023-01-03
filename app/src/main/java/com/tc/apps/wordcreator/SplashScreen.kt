@@ -18,8 +18,8 @@ class SplashScreen : AppCompatActivity() {
         var imageView = findViewById<ImageView>(R.id.imageView2) as ImageView
 
         imageView.alpha = 0f
-        imageView.animate().setDuration(1000).alpha(1f).withEndAction{
-            WordsDictionary.initializeDictionary(this)
+        imageView.animate().setDuration(10).alpha(1f).withEndAction{
+            initializeDictionary(this)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

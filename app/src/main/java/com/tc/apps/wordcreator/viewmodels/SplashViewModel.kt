@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.tc.apps.wordcreator.SplashScreen
 import com.tc.apps.wordcreator.WordsContainer
+import kotlinx.coroutines.launch
 import java.util.*
 
 class SplashViewModel() : ViewModel() {
@@ -22,7 +24,7 @@ class SplashViewModel() : ViewModel() {
 
     //TODO("Testing umaziwa")
     fun LiveData<String>.state(txt: String, boo: Boolean): Boolean {
-        val useLess = this.hasActiveObservers()
+        //val useLess = this.hasActiveObservers()
         getBtnToDealWith(txt)
         return boo
     }
@@ -103,7 +105,7 @@ class SplashViewModel() : ViewModel() {
 
     //returns a word from Words Container
     private fun getData(): String {
-        val word = wordsContainer.getWords()
+        val word = wordsContainer.getWords(dictionary)
 
         val randomMap = word.random()
         val mapKey = randomMap.map { it.key }
@@ -182,10 +184,14 @@ class SplashViewModel() : ViewModel() {
     }
 
     init {
-        addButtonsToList()
-        getButtonLetter()
         dictionary = SplashScreen.getDictionary()
-        btnList += listOf(letter1,letter2, letter3, letter4, letter5)
+        addButtonsToList()
+        viewModelScope.launch{
+            getButtonLetter()
+        }
+
+
+        //btnList += listOf(letter1,letter2, letter3, letter4, letter5)
 //        shuffleWord()
     }
 }
