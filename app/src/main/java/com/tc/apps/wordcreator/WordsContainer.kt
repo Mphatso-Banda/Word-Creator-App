@@ -9,7 +9,7 @@ class WordsContainer {
 
     fun getWords(dictionary: MutableList<String>): List<Map<String, List<String>>>{
         val liwu = selectWord(dictionary)
-        val mawuAmbiri = checkAnagrams(liwu, mutableListOf("sat","mat"))
+        val mawuAmbiri = checkAnagrams(liwu, dictionary)
         list.clear()
         list.add(mapOf(liwu to mawuAmbiri))
         return list
@@ -32,11 +32,11 @@ class WordsContainer {
         val subString = mutableListOf<String>()
 
         for (word in dictionary){
-            if(cleanWord(word)){
+
                 if(ifStringInString(mawu, word.lowercase(Locale.getDefault()))){
                     subString.add(word)
                 }
-            }
+
         }
 
         return subString
@@ -114,7 +114,7 @@ class WordsContainer {
         } ?: emptyList()
     }
 
-    public fun cleanWord(word: String) : Boolean{
+    fun cleanWord(word: String) : Boolean{
         return (word.length in 3..9
                 && !(checkUpperCase(word))
                 && !(word.contains("[0-9]".toRegex()))
