@@ -123,29 +123,17 @@ class SplashViewModel() : ViewModel() {
 
     }
 
-    fun checkAnswer():Boolean{
-        Log.d("Check Ans", "$correctWords[]")
-        if(!correctWords.contains(answer.toString().lowercase(Locale.ROOT))){
-            return if(words.contains(answer.toString().lowercase(Locale.ROOT))){
-                //Correct word
-
-                Log.d("Check Ans", "Correct Word Sucka!")
-                increasePoints()
-                Log.d("score", score.value.toString())
-                reset()
-                true
-            } else{
-                if(dictionary.contains(answer.toString())){
-                    increasePoints()
-                    true
-                }
-                else{
-                    false
-                }
-            }
-        }else{
-            Log.d("Check Ans", "Ilimo kale!")
-            return false
+    fun checkAnswer(): Int{
+        return if(correctWords.contains(answer.toString().lowercase(Locale.getDefault()))){
+            reset()
+            2
+        } else if(dictionary.contains(answer.toString().lowercase(Locale.getDefault()))){
+            increasePoints()
+            reset()
+            1
+        } else{
+            reset()
+            0
         }
     }
 

@@ -164,7 +164,7 @@ class MainActivity : AppCompatActivity() {
 
     //checkAnswer
     private fun checkAnswer(){
-        if(viewModel.checkAnswer()){
+        if(viewModel.checkAnswer() == 1){
             correctAlert()
             enableButton(buttonsMap)
 
@@ -177,6 +177,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else{
+            enableButton(buttonsMap)
             failedAlert()
         }
     }

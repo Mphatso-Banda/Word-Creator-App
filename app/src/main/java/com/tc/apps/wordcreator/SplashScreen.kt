@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import java.util.*
 
 class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,9 +35,11 @@ class SplashScreen : AppCompatActivity() {
             val assetManager: AssetManager = context.assets
             val wordpath = assetManager.open("words.txt")
 
+            val wordsContainer = WordsContainer()
             wordpath.reader().useLines { lines ->
                 lines.forEach {
-                    dictionary.add(it)
+                    if(wordsContainer.cleanWord(it))
+                        dictionary.add(it.lowercase(Locale.getDefault()))
                 }
             }
         }
