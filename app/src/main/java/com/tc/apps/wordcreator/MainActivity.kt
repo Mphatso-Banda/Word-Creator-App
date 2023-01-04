@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import androidx.lifecycle.LiveData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
@@ -164,33 +165,64 @@ class MainActivity : AppCompatActivity() {
 
     //checkAnswer
     private fun checkAnswer(){
-        if(viewModel.checkAnswer() == 1){
-            correctAlert()
-            enableButton(buttonsMap)
 
-            imgVector.isVisible = true
-            val anime: AnimatedVectorDrawable = imgVector.drawable as AnimatedVectorDrawable
-            anime.start()
-            imgVector.animate().setDuration(2000).alpha(1f).withEndAction{
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                imgVector.isVisible = false
+        viewModel.apply{
+
+            when(checkAnswer()){
+                1 -> {
+                    binding.imageVector.setImageResource(R.drawable.anime_vector)
+                    correctAlert()
+                    enableButton(buttonsMap)
+                    showAnimation()
+                }
+                2 -> {
+                    binding.imageVector.apply {
+                        setImageResource(R.drawable.anime_used)
+                    }
+                    alreadyUsedAlert()
+                    enableButton(buttonsMap)
+                    showAnimation()
+                }
+                else -> {
+                    binding.imageVector.apply {
+                        setImageResource(R.drawable.animate_failed)
+                    }
+                    enableButton(buttonsMap)
+                    failedAlert()
+                    showAnimation()
+                }
             }
+
         }
-        else{
-            enableButton(buttonsMap)
-            failedAlert()
+
+    }
+
+    private fun showAnimation(){
+        imgVector.isVisible = true
+        val anime: AnimatedVectorDrawable = imgVector.drawable as AnimatedVectorDrawable
+        anime.start()
+        imgVector.animate().setDuration(2000).alpha(1f).withEndAction{
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            imgVector.isVisible = false
         }
     }
 
     private fun correctAlert(){
-        val toast = Toast.makeText(this, "Congrats", Toast.LENGTH_LONG)
+        val toast = Toast.makeText(this, getText(R.string.congratsText), Toast.LENGTH_LONG)
         toast.setGravity(Gravity.TOP,0,0)
         toast.show()
 
     }
 
     private fun failedAlert(){
-        val toast = Toast.makeText(this, "Failed", Toast.LENGTH_LONG)
+        val toast = Toast.makeText(this, getText(R.string.failedText), Toast.LENGTH_LONG)
+        toast.setGravity(Gravity.TOP,0,0)
+        toast.show()
+
+    }
+
+    private fun alreadyUsedAlert(){
+        val toast = Toast.makeText(this, getText(R.string.wordUsedText), Toast.LENGTH_LONG)
         toast.setGravity(Gravity.TOP,0,0)
         toast.show()
 

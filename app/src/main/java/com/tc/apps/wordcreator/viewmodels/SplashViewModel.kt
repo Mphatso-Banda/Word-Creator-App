@@ -1,10 +1,14 @@
 package com.tc.apps.wordcreator.viewmodels
 
+import android.app.Application
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tc.apps.wordcreator.R
 import com.tc.apps.wordcreator.SplashScreen
 import com.tc.apps.wordcreator.WordsContainer
 import kotlinx.coroutines.launch
@@ -16,7 +20,6 @@ class SplashViewModel() : ViewModel() {
     private val correctWords = mutableListOf<String>()
     private var scoreCount = 0
     private var dictionary = mutableListOf<String>()
-
     private var listOfLetters = mutableListOf<MutableLiveData<String>>()
 
     private val _score = MutableLiveData<Int>(0)
@@ -177,8 +180,6 @@ class SplashViewModel() : ViewModel() {
         viewModelScope.launch{
             getButtonLetter()
         }
-
-
         //btnList += listOf(letter1,letter2, letter3, letter4, letter5)
 //        shuffleWord()
     }
