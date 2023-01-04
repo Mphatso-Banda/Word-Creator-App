@@ -176,6 +176,10 @@ class MainActivity : AppCompatActivity() {
                 imgVector.isVisible = false
             }
         }
+        else if(viewModel.checkAnswer() == 2){
+            enableButton(buttonsMap)
+            failedAlert()
+        }
         else{
             enableButton(buttonsMap)
             failedAlert()
