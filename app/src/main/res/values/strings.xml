@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Konza Liwu</string>
+    <string name="wordUsedText">word already used</string>
+    <string name="failedText">failed! please try again</string>
+    <string name="congratsText">congratulations!</string>
     <string name="title_activity_another_one">AnotherOne</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
