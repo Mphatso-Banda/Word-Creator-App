@@ -2,24 +2,28 @@ package com.tc.apps.wordcreator
 
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.media.MediaPlayer
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.Gravity
-import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.lifecycle.Observer
+import androidx.work.*
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
 import com.tc.apps.wordcreator.viewmodels.SplashViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: SplashViewModel by viewModels()
@@ -30,11 +34,30 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imgVector: ImageView
 
     private var media = MediaPlayer()
+    private var generatedWords = mapOf<String, Any>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        val constraints = Constraints.Builder()
+//            .setRequiresBatteryNotLow(true)
+//            .setRequiresStorageNotLow(true)
+//            .build()
+//
+//        val oneTimeWorkRequest = OneTimeWorkRequestBuilder<WordCreatorWorker>()
+//            .setConstraints(constraints)
+//            .build()
+//
+//        WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
+//
+//        WorkManager.getInstance(this)
+//            .getWorkInfoByIdLiveData(oneTimeWorkRequest.id).observe(this, Observer { workInfo ->
+//                if (workInfo.state == WorkInfo.State.SUCCEEDED){
+//                    Log.d("worker task complete", "Zatheka chanichani")
+//                }
+//            })
 
         media = MediaPlayer.create(this, R.raw.game_music)
         media.start()
@@ -44,6 +67,11 @@ class MainActivity : AppCompatActivity() {
         }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        GlobalScope.launch{
+//            val obj = Json.encodeToString(SplashScreen.getDictionary())
+//
+//        }
 
         binding.apply {
             splashViewModel = viewModel
@@ -98,7 +126,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             newCharacters.setOnClickListener {
+
+                progressBar.isVisible = true
                 viewModel.getButtonLetter()
+                progressBar.isVisible = false
                 enableButton(buttonsMap)
                 setButtonState()
                 val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
@@ -122,8 +153,9 @@ class MainActivity : AppCompatActivity() {
         if(!media.isPlaying){
             media.start()
         }
-
     }
+
+
     private fun setButtonState(){
         viewModel.apply {
             for ((liveData, button) in buttonsMap){
@@ -209,6 +241,17 @@ class MainActivity : AppCompatActivity() {
     private fun startPlaying(){
 
     }
+
+    private fun isExternalStorageReadOnly(): Boolean {
+        val extStorageState = Environment.getExternalStorageState()
+        return Environment.MEDIA_MOUNTED_READ_ONLY == extStorageState
+    }
+
+    private fun isExternalStorageAvailable(): Boolean {
+        val extStorageState = Environment.getExternalStorageState()
+        return Environment.MEDIA_MOUNTED == extStorageState
+    }
+
 
 }
 

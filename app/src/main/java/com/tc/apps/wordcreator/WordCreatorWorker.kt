@@ -1,18 +1,31 @@
 package com.tc.apps.wordcreator
 
+import android.content.Context
+import android.util.Log
+import androidx.work.Worker
+import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import java.util.*
+//for later
+class WordCreatorWorker(context: Context, workerParams: WorkerParameters): Worker(context, workerParams) {
+    override fun doWork(): Result {
 
-class WordsContainer {
+        val output = workDataOf("is_success" to generatedWords(SplashScreen.getDictionary()))
+        return Result.success(output)
+    }
 
-    var list = mutableListOf<Map<String, List<String>>>()
 
+    private fun generatedWords(list: MutableList<String>) : Boolean{
+        val returnList = mutableListOf<Map<String, List<String>>>()
 
-    fun getWords(dictionary: MutableList<String>): List<Map<String, List<String>>>{
-        val liwu = selectWord(dictionary)
-        val mawuAmbiri = checkAnagrams(liwu, dictionary)
-        list.clear()
-        list.add(mapOf(liwu to mawuAmbiri))
-        return list
+        for (i in 1..10){
+            val mawu = selectWord(list)
+            returnList.add(mapOf(mawu to checkAnagrams(mawu, list)))
+
+            Log.d("Generated Word:", mawu)
+        }
+
+        return true
     }
 
 
@@ -26,9 +39,9 @@ class WordsContainer {
 
         for (word in dictionary){
 
-                if(ifStringInString(mawu, word.lowercase(Locale.getDefault()))){
-                    subString.add(word)
-                }
+            if(ifStringInString(mawu, word.lowercase(Locale.getDefault()))){
+                subString.add(word)
+            }
 
         }
 
@@ -84,34 +97,6 @@ class WordsContainer {
             }
         }
         return dictionaryWord == String(list)
-    }
-
-    private fun checkUpperCase(word: String): Boolean{
-        var boolean : Boolean = false
-        for (c in word){
-            if(c.isUpperCase()){
-                boolean = true
-            }
-            else{
-                boolean = false
-                break
-            }
-        }
-        return boolean
-    }
-
-    private fun String?.indexesOf(substr: String, ignoreCase: Boolean = true): List<Int> {
-        return this?.let {
-            val regex = if (ignoreCase) Regex(substr, RegexOption.IGNORE_CASE) else Regex(substr)
-            regex.findAll(this).map { it.range.start }.toList()
-        } ?: emptyList()
-    }
-
-    fun cleanWord(word: String) : Boolean{
-        return (word.length in 3..9
-                && !(checkUpperCase(word))
-                && !(word.contains("[0-9]".toRegex()))
-                && !(word.contains("[!\"#$%&'()*+,-./:;\\\\<=>?@\\[\\]^_`{|}~]".toRegex())))
     }
 
     private fun getLastIndex(map: Map<Int, Char>, value: Char) : Int{
