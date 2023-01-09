@@ -1,11 +1,15 @@
 package com.tc.apps.wordcreator
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -14,21 +18,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.isVisible
-import androidx.core.view.marginBottom
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.work.*
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
 import com.tc.apps.wordcreator.viewmodels.SplashViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: SplashViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
+
+    lateinit var animeButton: Button
 
     private var buttonsMap = mapOf<LiveData<String>, Button>()
 
@@ -128,9 +126,13 @@ class MainActivity : AppCompatActivity() {
 
             newCharacters.setOnClickListener {
 
-                progressBar.isVisible = true
+                for ((data, button) in buttonsMap){
+                    animeButton = button
+                    rotater()
+                }
+//                progressBar.isVisible = true
                 viewModel.getButtonLetter()
-                progressBar.isVisible = false
+//                progressBar.isVisible = false
                 enableButton(buttonsMap)
                 setButtonState()
                 val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
@@ -172,6 +174,24 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    private fun rotater() {
+        // rotates the View containing the star from a value of -360 to 0
+
+        val animator = ObjectAnimator.ofFloat(animeButton, View.ROTATION, -360f, 0f)
+        //the default duration for all animes is 300ms so they happen fast, increase to slow it down
+        animator.duration = 1000
+        //disable the rotate button when animation is in progress to avoid UI janks
+        animator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?) {
+                binding.newCharacters.isEnabled = false
+            }
+            override fun onAnimationEnd(animation: Animator?) {
+                binding.newCharacters.isEnabled = true
+            }
+        })
+        animator.start()
     }
 
     //Getting the letter of the button
