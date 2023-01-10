@@ -106,9 +106,11 @@ class MainActivity : AppCompatActivity() {
                             if(button.text == s){
                                 if(button.isEnabled){
                                     button.isEnabled = true
+                                    fadeIn(button)
                                 }
                                 else{
                                     button.isEnabled = true
+                                    fadeIn(button)
                                     break
                                 }
                             }
@@ -183,16 +185,38 @@ class MainActivity : AppCompatActivity() {
         //the default duration for all animes is 300ms so they happen fast, increase to slow it down
         animator.duration = 1000
         //disable the rotate button when animation is in progress to avoid UI janks
-        animator.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?) {
-                binding.newCharacters.isEnabled = false
-            }
-            override fun onAnimationEnd(animation: Animator?) {
-                binding.newCharacters.isEnabled = true
-            }
-        })
+        animator.disableViewDuringAnimation(binding.newCharacters)
         animator.start()
     }
+
+    private fun faderOut(btn: Button) {
+        val animator = ObjectAnimator.ofFloat(btn, View.ALPHA, 0f)
+        //repeat to make the view fade back to opaque
+//        animator.repeatCount = 1
+//        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.disableViewDuringAnimation(btn)
+        animator.start()
+    }
+
+    private fun fadeIn(btn: Button){
+        val animator = ObjectAnimator.ofFloat(btn, View.ALPHA, 1f)
+        animator.disableViewDuringAnimation(btn)
+        animator.start()
+    }
+
+    private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
+        addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?) {
+                view.isEnabled = false
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                view.isEnabled = true
+            }
+        })
+    }
+
+
 
     //Getting the letter of the button
     private fun getLetter(btn: Button): String{
@@ -204,6 +228,7 @@ class MainActivity : AppCompatActivity() {
     private fun enableButton(map: Map<LiveData<String>, Button>){
         for ((liveData, button) in map){
             button.isEnabled = true
+            fadeIn(button)
         }
     }
 
@@ -211,6 +236,7 @@ class MainActivity : AppCompatActivity() {
     private fun getAnswerFromButton(btn: Button){
         btn.setOnClickListener {
             viewModel.answer(getLetter(btn))
+            faderOut(btn)
             btn.isEnabled = false
         }
     }
