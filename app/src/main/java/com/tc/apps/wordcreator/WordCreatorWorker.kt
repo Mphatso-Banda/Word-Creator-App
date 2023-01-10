@@ -18,7 +18,7 @@ class WordCreatorWorker(context: Context, workerParams: WorkerParameters): Worke
     private fun generatedWords(list: MutableList<String>) : Boolean{
         val returnList = mutableListOf<Map<String, List<String>>>()
 
-        for (i in 1..10){
+        for (i in 1..100){
             val mawu = selectWord(list)
             returnList.add(mapOf(mawu to checkAnagrams(mawu, list)))
 
@@ -39,7 +39,7 @@ class WordCreatorWorker(context: Context, workerParams: WorkerParameters): Worke
 
         for (word in dictionary){
 
-            if(ifStringInString(mawu, word.lowercase(Locale.getDefault()))){
+            if(canMakeStr2(mawu, word.lowercase(Locale.getDefault()))){
                 subString.add(word)
             }
 
@@ -48,65 +48,20 @@ class WordCreatorWorker(context: Context, workerParams: WorkerParameters): Worke
         return subString
     }
 
-    private fun ifStringInString(mawu: String, dictionaryWord: String): Boolean{
-        val list = CharArray(dictionaryWord.length)
-        val found = mutableListOf<Int>()
+    private fun canMakeStr2(str1: String, str2: String): Boolean {
+        val count = IntArray(256)
+        val str3 = str1.toCharArray()
 
-//        for ((i, c) in dictionaryWord.withIndex()){
-//            for((j, s) in mawu.withIndex()){
-//                if(found.contains(j)){
-//                    continue
-//                }
-//                else{
-//                    if(c == s){
-//                        found.add(j)
-//                        list[i] = c
-//                        break
-//                    }
-//                }
-//
-//            }
-//        }
-//
-//    val map = mutableMapOf<Int, Char>()
-//
-//    for((position, value ) in dictionaryWord.withIndex()){
-//        if(mawu.contains(value)){
-//            if(map.containsKey(mawu.indexOf(value)) && map.containsValue(value)){
-//                list[position] = value
-//                map[mawu.indexOf(value)] = value
-//            }
-//        }
-//    }
-//        return dictionaryWord == String(list)
+        for (i in str3.indices)
+            count[str3[i].code]++
 
-        val map = mutableMapOf<Int, Char>()
+        val str4 = str2.toCharArray()
 
-        for((position, value ) in dictionaryWord.withIndex()){
-            if(mawu.contains(value)){
-                if(!map.containsKey(getLastIndex(map, value))){
-                    list[position] = value
-                    map[mawu.indexOf(value)] = value
-                }
-                else{
-                    if(mawu.indexOf(value, getLastIndex(map, value) + 1) != -1){
-                        list[position] = value
-                        map[mawu.indexOf(value, getLastIndex(map, value) + 1)] = value
-                    }
-                }
-            }
+        for (i in str4.indices) {
+            if (count[str4[i].code] == 0) return false
+            count[str4[i].code]--
         }
-        return dictionaryWord == String(list)
+        return true
     }
 
-    private fun getLastIndex(map: Map<Int, Char>, value: Char) : Int{
-        var lastIndex: Int = 0
-        for ((k,v) in map){
-            if(value == v){
-                lastIndex = k
-            }
-        }
-
-        return lastIndex
-    }
 }

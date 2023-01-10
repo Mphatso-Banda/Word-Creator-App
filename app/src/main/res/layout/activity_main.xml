@@ -17,7 +17,19 @@
         android:background="@drawable/app_bg"
         >
 
+        <ProgressBar
+            android:id="@+id/progressBar3"
+            style="?android:attr/progressBarStyle"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/relativeLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/relativeLayout" />
+
         <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.6"
@@ -31,9 +43,9 @@
                 android:id="@+id/imageVector"
                 android:layout_width="193dp"
                 android:layout_height="160dp"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="100dp"
-                android:layout_centerHorizontal="true"
                 tools:srcCompat="@drawable/anime_vector" />
         </RelativeLayout>
 

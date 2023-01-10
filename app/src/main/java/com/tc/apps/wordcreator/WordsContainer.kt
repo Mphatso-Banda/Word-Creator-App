@@ -6,11 +6,20 @@ import java.util.*
 class WordsContainer {
 
     var list = mutableListOf<Map<String, List<String>>>()
+    private val MAX: Int = 256
 
 
     fun getWords(dictionary: MutableList<String>): List<Map<String, List<String>>> {
         val liwu = selectWord(dictionary)
-        val mawuAmbiri = checkAnagrams(liwu, dictionary)
+
+        val count = IntArray(MAX)
+        val str3 = liwu.lowercase(Locale.ROOT).toCharArray()
+
+        for (i in str3.indices) {
+            count[str3[i].code]++
+        }
+
+        val mawuAmbiri = checkAnagrams(count, dictionary)
         list.clear()
         list.add(mapOf(liwu to mawuAmbiri))
         return list
@@ -21,13 +30,13 @@ class WordsContainer {
         return dictionary.random()
     }
 
-    private fun checkAnagrams(mawu: String, dictionary: MutableList<String>): MutableList<String> {
+    private fun checkAnagrams(mawu: IntArray, dictionary: MutableList<String>): MutableList<String> {
 
         val subString = mutableListOf<String>()
 
         val time = System.currentTimeMillis()
         for (word in dictionary) {
-            if (canMakeStr2(mawu.lowercase(Locale.getDefault()), word.lowercase(Locale.getDefault()))) {
+            if (canMakeStr2(mawu, word.lowercase(Locale.getDefault()))) {
                 subString.add(word)
             }
 //            if (ifStringInString(mawu.lowercase(Locale.getDefault()), word.lowercase(Locale.getDefault()))) {
@@ -42,12 +51,12 @@ class WordsContainer {
         return subString
     }
 
-    private fun canMakeStr2(str1: String, str2: String): Boolean {
-        val count = IntArray(256)
-        val str3 = str1.toCharArray()
-
-        for (i in str3.indices)
-            count[str3[i].code]++
+    private fun canMakeStr2(count: IntArray, str2: String): Boolean {
+//        val count = IntArray(MAX)
+//        val str3 = str1.toCharArray()
+//
+//        for (i in str3.indices)
+//            count[str3[i].code]++
 
         val str4 = str2.toCharArray()
 
@@ -111,8 +120,6 @@ class WordsContainer {
         }
         return dictionaryWord == String(list)
     }
-
-
 
     private fun checkUpperCase(word: String): Boolean {
         var boolean: Boolean = false

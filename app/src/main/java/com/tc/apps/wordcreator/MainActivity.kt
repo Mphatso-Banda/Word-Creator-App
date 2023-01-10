@@ -19,6 +19,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.work.Constraints
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
 import com.tc.apps.wordcreator.viewmodels.SplashViewModel
 
@@ -132,10 +137,9 @@ class MainActivity : AppCompatActivity() {
                     animeButton = button
                     rotater()
                 }
-//                progressBar.isVisible = true
-
+                progressBar3.isVisible = true
                 viewModel.getButtonLetter()
-//                progressBar.isVisible = false
+                progressBar3.isVisible = false
                 enableButton(buttonsMap)
                 setButtonState()
                 val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
