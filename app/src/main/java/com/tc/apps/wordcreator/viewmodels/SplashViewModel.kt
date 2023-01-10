@@ -176,9 +176,10 @@ class SplashViewModel() : ViewModel() {
     init {
         dictionary = SplashScreen.getDictionary()
         addButtonsToList()
-        viewModelScope.launch{
-            getButtonLetter()
-        }
+        getButtonLetter()
+//        viewModelScope.launch{
+//
+//        }
         //btnList += listOf(letter1,letter2, letter3, letter4, letter5)
 //        shuffleWord()
     }

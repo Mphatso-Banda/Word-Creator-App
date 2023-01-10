@@ -133,6 +133,7 @@ class MainActivity : AppCompatActivity() {
                     rotater()
                 }
 //                progressBar.isVisible = true
+
                 viewModel.getButtonLetter()
 //                progressBar.isVisible = false
                 enableButton(buttonsMap)
