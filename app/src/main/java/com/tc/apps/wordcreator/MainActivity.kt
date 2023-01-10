@@ -179,21 +179,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun rotater() {
-        // rotates the View containing the star from a value of -360 to 0
-
         val animator = ObjectAnimator.ofFloat(animeButton, View.ROTATION, -360f, 0f)
-        //the default duration for all animes is 300ms so they happen fast, increase to slow it down
         animator.duration = 1000
-        //disable the rotate button when animation is in progress to avoid UI janks
         animator.disableViewDuringAnimation(binding.newCharacters)
         animator.start()
     }
 
     private fun faderOut(btn: Button) {
         val animator = ObjectAnimator.ofFloat(btn, View.ALPHA, 0f)
-        //repeat to make the view fade back to opaque
-//        animator.repeatCount = 1
-//        animator.repeatMode = ObjectAnimator.REVERSE
         animator.disableViewDuringAnimation(btn)
         animator.start()
     }
