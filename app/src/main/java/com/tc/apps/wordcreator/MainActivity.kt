@@ -2,6 +2,7 @@ package com.tc.apps.wordcreator
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.media.MediaPlayer
@@ -10,21 +11,19 @@ import android.os.Environment
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.work.Constraints
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
-import com.google.android.material.badge.BadgeDrawable
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
 import com.tc.apps.wordcreator.viewmodels.SplashViewModel
 
@@ -40,8 +39,6 @@ class MainActivity : AppCompatActivity() {
 
     private var media = MediaPlayer()
     private var generatedWords = mapOf<String, Any>()
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +62,6 @@ class MainActivity : AppCompatActivity() {
 //                    Log.d("worker task complete", "Zatheka chanichani")
 //                }
 //            })
-
 
         media = MediaPlayer.create(this, R.raw.game_music)
         media.start()
@@ -91,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                         value ->  answer.setText(value)
                 }
 
-                buttonsMap = mapOf(letter1 to buttonA, letter2 to buttonB, letter3 to buttonC,
+                buttonsMap += mapOf(letter1 to buttonA, letter2 to buttonB, letter3 to buttonC,
                     letter4 to buttonD, letter5 to buttonE, letter6 to buttonF, letter7 to buttonG,
                     letter8 to buttonH, letter9 to buttonI)
 
@@ -100,21 +96,6 @@ class MainActivity : AppCompatActivity() {
 
                 score.observe(this@MainActivity){
                     value -> binding.score.text = "Score: ${value.toString()}"
-                }
-
-                indicator.observe(this@MainActivity){
-                    value -> binding.indication.text = value
-                    fadeIn(indication)
-                    fadeIn(binding.score)
-                }
-
-                level.observe(this@MainActivity){
-                    viewModel.getButtonLetter()
-                    progressBar3.isVisible = false
-                    enableButton(buttonsMap)
-                    setButtonState()
-                    val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
-                    newCharacters.setBackgroundColor(randColor)
                 }
             }
 
@@ -151,18 +132,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             newCharacters.setOnClickListener {
-
-                for ((data, button) in buttonsMap){
-                    animeButton = button
-                    rotater()
-                }
-                progressBar3.isVisible = true
-                viewModel.getButtonLetter()
-                progressBar3.isVisible = false
-                enableButton(buttonsMap)
-                setButtonState()
-                val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
-                newCharacters.setBackgroundColor(randColor)
+                newCharactersOnClick()
             }
         }
         imgVector.isVisible = false
@@ -188,11 +158,13 @@ class MainActivity : AppCompatActivity() {
     private fun setButtonState(){
         viewModel.apply {
             for ((liveData, button) in buttonsMap){
-                if(liveData.value != null || liveData.value == ""){
+                if(liveData.value != null){
                     setTextToButtons(liveData, button)
                     button.isVisible = true
                     val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
                     button.setBackgroundColor(randColor)
+//                    animeButton = button
+//                    shower()
                 }
                 else{
                     button.isVisible = false
@@ -215,10 +187,45 @@ class MainActivity : AppCompatActivity() {
         animator.start()
     }
 
-    private fun fadeIn(btn: View){
+    private fun fadeIn(btn: Button){
         val animator = ObjectAnimator.ofFloat(btn, View.ALPHA, 1f)
         animator.disableViewDuringAnimation(btn)
         animator.start()
+    }
+
+    private fun shower() {
+        val container = animeButton.parent as ViewGroup
+        var buttonH: Float = animeButton.height.toFloat()
+        val btnLocation = animeButton.layoutDirection.toFloat()
+        var newButton: AppCompatButton = animeButton as AppCompatButton
+        container.removeView(newButton)
+        container.addView(newButton)
+
+        val mover = ObjectAnimator.ofFloat(
+            newButton, View.TRANSLATION_Y,
+            -buttonH, btnLocation
+        )
+        mover.interpolator = AccelerateInterpolator(1f)
+        val rotator = ObjectAnimator.ofFloat(
+            newButton, View.ROTATION,
+            -360f, 0f
+        )
+        rotator.interpolator = LinearInterpolator()
+
+        val set = AnimatorSet()
+        set.playTogether(mover)
+        set.duration = (Math.random() * 800 + 300).toLong()
+
+        set.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?) {
+                binding.newCharacters.isEnabled = false
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                binding.newCharacters.isEnabled = true
+            }
+        })
+        set.start()
     }
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
@@ -233,7 +240,22 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
+    private fun newCharactersOnClick(){
+        binding.apply {
+            for ((data, button) in buttonsMap){
+                animeButton = button
+//                    rotater()
+                shower()
+            }
+            progressBar3.isVisible = true
+            viewModel.getButtonLetter()
+            progressBar3.isVisible = false
+            enableButton(buttonsMap)
+            setButtonState()
+            val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
+            newCharacters.setBackgroundColor(randColor)
+        }
+    }
 
     //Getting the letter of the button
     private fun getLetter(btn: Button): String{
@@ -327,6 +349,10 @@ class MainActivity : AppCompatActivity() {
         liveData.observe(this@MainActivity){
             value -> btn.text = value
         }
+    }
+
+    private fun startPlaying(){
+
     }
 
     private fun isExternalStorageReadOnly(): Boolean {
