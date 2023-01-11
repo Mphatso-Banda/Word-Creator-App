@@ -8,6 +8,7 @@ import androidx.work.workDataOf
 import java.util.*
 //for later
 class WordCreatorWorker(context: Context, workerParams: WorkerParameters): Worker(context, workerParams) {
+    private val MAX: Int = 256
     override fun doWork(): Result {
 
         val output = workDataOf("is_success" to generatedWords(SplashScreen.getDictionary()))
@@ -18,7 +19,7 @@ class WordCreatorWorker(context: Context, workerParams: WorkerParameters): Worke
     private fun generatedWords(list: MutableList<String>) : Boolean{
         val returnList = mutableListOf<Map<String, List<String>>>()
 
-        for (i in 1..100){
+        for (i in 1..1000){
             val mawu = selectWord(list)
             returnList.add(mapOf(mawu to checkAnagrams(mawu, list)))
 
@@ -37,9 +38,16 @@ class WordCreatorWorker(context: Context, workerParams: WorkerParameters): Worke
 
         val subString = mutableListOf<String>()
 
+        val count = IntArray(MAX)
+        val str3 = mawu.lowercase(Locale.ROOT).toCharArray()
+
+        for (i in str3.indices) {
+            count[str3[i].code]++
+        }
+
         for (word in dictionary){
 
-            if(canMakeStr2(mawu, word.lowercase(Locale.getDefault()))){
+            if(canMakeStr2(count, word.lowercase(Locale.getDefault()))){
                 subString.add(word)
             }
 
@@ -48,12 +56,12 @@ class WordCreatorWorker(context: Context, workerParams: WorkerParameters): Worke
         return subString
     }
 
-    private fun canMakeStr2(str1: String, str2: String): Boolean {
-        val count = IntArray(256)
-        val str3 = str1.toCharArray()
-
-        for (i in str3.indices)
-            count[str3[i].code]++
+    private fun canMakeStr2(count: IntArray, str2: String): Boolean {
+//        val count = IntArray(MAX)
+//        val str3 = str1.toCharArray()
+//
+//        for (i in str3.indices)
+//            count[str3[i].code]++
 
         val str4 = str2.toCharArray()
 

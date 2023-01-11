@@ -24,6 +24,7 @@ import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.google.android.material.badge.BadgeDrawable
 import com.tc.apps.wordcreator.databinding.ActivityMainBinding
 import com.tc.apps.wordcreator.viewmodels.SplashViewModel
 
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity() {
 
     private var media = MediaPlayer()
     private var generatedWords = mapOf<String, Any>()
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 //                    Log.d("worker task complete", "Zatheka chanichani")
 //                }
 //            })
+
 
         media = MediaPlayer.create(this, R.raw.game_music)
         media.start()
@@ -87,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                         value ->  answer.setText(value)
                 }
 
-                buttonsMap += mapOf(letter1 to buttonA, letter2 to buttonB, letter3 to buttonC,
+                buttonsMap = mapOf(letter1 to buttonA, letter2 to buttonB, letter3 to buttonC,
                     letter4 to buttonD, letter5 to buttonE, letter6 to buttonF, letter7 to buttonG,
                     letter8 to buttonH, letter9 to buttonI)
 
@@ -96,6 +100,21 @@ class MainActivity : AppCompatActivity() {
 
                 score.observe(this@MainActivity){
                     value -> binding.score.text = "Score: ${value.toString()}"
+                }
+
+                indicator.observe(this@MainActivity){
+                    value -> binding.indication.text = value
+                    fadeIn(indication)
+                    fadeIn(binding.score)
+                }
+
+                level.observe(this@MainActivity){
+                    viewModel.getButtonLetter()
+                    progressBar3.isVisible = false
+                    enableButton(buttonsMap)
+                    setButtonState()
+                    val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
+                    newCharacters.setBackgroundColor(randColor)
                 }
             }
 
@@ -169,7 +188,7 @@ class MainActivity : AppCompatActivity() {
     private fun setButtonState(){
         viewModel.apply {
             for ((liveData, button) in buttonsMap){
-                if(liveData.value != null){
+                if(liveData.value != null || liveData.value == ""){
                     setTextToButtons(liveData, button)
                     button.isVisible = true
                     val randColor = Color((0..256).random(), (0..256).random(), (0..256).random()).toArgb()
@@ -196,7 +215,7 @@ class MainActivity : AppCompatActivity() {
         animator.start()
     }
 
-    private fun fadeIn(btn: Button){
+    private fun fadeIn(btn: View){
         val animator = ObjectAnimator.ofFloat(btn, View.ALPHA, 1f)
         animator.disableViewDuringAnimation(btn)
         animator.start()
@@ -308,10 +327,6 @@ class MainActivity : AppCompatActivity() {
         liveData.observe(this@MainActivity){
             value -> btn.text = value
         }
-    }
-
-    private fun startPlaying(){
-
     }
 
     private fun isExternalStorageReadOnly(): Boolean {
