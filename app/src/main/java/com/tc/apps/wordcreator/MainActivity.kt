@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                     value -> binding.score.text = getString(R.string.score, value)
                 }
                 level.observe(this@MainActivity){
-
+                    newCharactersOnClick()
                 }
             }
 
