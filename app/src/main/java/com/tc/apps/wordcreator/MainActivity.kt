@@ -13,6 +13,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
+import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
@@ -40,10 +41,11 @@ class MainActivity : AppCompatActivity() {
     private var media = MediaPlayer()
     private var generatedWords = mapOf<String, Any>()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        var explode = android.view.animation.AnimationUtils.loadAnimation(this,
+            R.anim.explode)
 
 //        val constraints = Constraints.Builder()
 //            .setRequiresBatteryNotLow(true)
@@ -128,7 +130,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             for ((liveData, button) in buttonsMap){
-                getAnswerFromButton(button)
+                getAnswerFromButton(button, explode)
             }
 
             newCharacters.setOnClickListener {
@@ -182,19 +184,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun faderOut(btn: Button) {
-        val animator = ObjectAnimator.ofFloat(btn, View.ALPHA, 0f)
-        animator.disableViewDuringAnimation(btn)
-        animator.start()
+        val animatorX = ObjectAnimator.ofFloat(btn, View.SCALE_X, 0f)
+        val animatorY = ObjectAnimator.ofFloat(btn, View.SCALE_Y, 0f)
+        val set = AnimatorSet()
+        set.playTogether(animatorY, animatorX)
+//        animator.disableViewDuringAnimation(btn)
+        set.start()
     }
 
     private fun fadeIn(btn: Button){
-        val animator = ObjectAnimator.ofFloat(btn, View.ALPHA, 1f)
-        animator.disableViewDuringAnimation(btn)
-        animator.start()
+        val animatorX = ObjectAnimator.ofFloat(btn, View.SCALE_X, 1f)
+        val animatorY = ObjectAnimator.ofFloat(btn, View.SCALE_Y, 1f)
+        val set = AnimatorSet()
+        set.playTogether(animatorY, animatorX)
+//        animator.disableViewDuringAnimation(btn)
+        set.start()
     }
 
     private fun shower() {
         val container = animeButton.parent as ViewGroup
+        val containerH = container.height.toFloat()
         var buttonH: Float = animeButton.height.toFloat()
         val btnLocation = animeButton.layoutDirection.toFloat()
         var newButton: AppCompatButton = animeButton as AppCompatButton
@@ -203,7 +212,7 @@ class MainActivity : AppCompatActivity() {
 
         val mover = ObjectAnimator.ofFloat(
             newButton, View.TRANSLATION_Y,
-            -buttonH, btnLocation
+            -containerH, btnLocation
         )
         mover.interpolator = AccelerateInterpolator(1f)
         val rotator = ObjectAnimator.ofFloat(
@@ -272,10 +281,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     //General function to set the actions for the buttons
-    private fun getAnswerFromButton(btn: Button){
+    private fun getAnswerFromButton(btn: Button, explode: Animation){
         btn.setOnClickListener {
             viewModel.answer(getLetter(btn))
             faderOut(btn)
+//            btn.startAnimation(explode)
             btn.isEnabled = false
         }
     }
