@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.animation.ObjectAnimator.ofFloat
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imgVector: ImageView
 
     private var media = MediaPlayer()
-    private var generatedWords = mapOf<String, Any>()
+    //private var generatedWords = mapOf<String, Any>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,11 +73,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        GlobalScope.launch{
-//            val obj = Json.encodeToString(SplashScreen.getDictionary())
-//
-//        }
-
         binding.apply {
             splashViewModel = viewModel
 
@@ -87,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                         value ->  answer.setText(value)
                 }
 
-                buttonsMap += mapOf(letter1 to buttonA, letter2 to buttonB, letter3 to buttonC,
+                buttonsMap = buttonsMap + mapOf(letter1 to buttonA, letter2 to buttonB, letter3 to buttonC,
                     letter4 to buttonD, letter5 to buttonE, letter6 to buttonF, letter7 to buttonG,
                     letter8 to buttonH, letter9 to buttonI)
 
@@ -95,7 +91,10 @@ class MainActivity : AppCompatActivity() {
                 setButtonState()
 
                 score.observe(this@MainActivity){
-                    value -> binding.score.text = "Score: ${value.toString()}"
+                    value -> binding.score.text = getString(R.string.score, value)
+                }
+                level.observe(this@MainActivity){
+
                 }
             }
 
@@ -106,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             clearBtn.apply {
                 setOnClickListener{
                     val s = viewModel.clearLetter()
-                    for((liveData, button) in buttonsMap){
+                    for((_, button) in buttonsMap){
                         if(s != null){
                             if(button.text == s){
                                 if(button.isEnabled){
@@ -127,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                     viewModel.clearAnswer()
                 }
             }
-            for ((liveData, button) in buttonsMap){
+            for ((_, button) in buttonsMap){
                 getAnswerFromButton(button)
             }
 
@@ -175,38 +174,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun rotater() {
-        val animator = ObjectAnimator.ofFloat(animeButton, View.ROTATION, -360f, 0f)
+        val animator = ofFloat(animeButton, View.ROTATION, -360f, 0f)
         animator.duration = 1000
         animator.disableViewDuringAnimation(binding.newCharacters)
         animator.start()
     }
 
     private fun faderOut(btn: Button) {
-        val animator = ObjectAnimator.ofFloat(btn, View.ALPHA, 0f)
+        val animator = ofFloat(btn, View.ALPHA, 0f)
         animator.disableViewDuringAnimation(btn)
         animator.start()
     }
 
     private fun fadeIn(btn: Button){
-        val animator = ObjectAnimator.ofFloat(btn, View.ALPHA, 1f)
+        val animator = ofFloat(btn, View.ALPHA, 1f)
         animator.disableViewDuringAnimation(btn)
         animator.start()
     }
 
     private fun shower() {
         val container = animeButton.parent as ViewGroup
-        var buttonH: Float = animeButton.height.toFloat()
+        val buttonH: Float = animeButton.height.toFloat()
         val btnLocation = animeButton.layoutDirection.toFloat()
-        var newButton: AppCompatButton = animeButton as AppCompatButton
+        val newButton: AppCompatButton = animeButton as AppCompatButton
         container.removeView(newButton)
         container.addView(newButton)
 
-        val mover = ObjectAnimator.ofFloat(
+        val mover = ofFloat(
             newButton, View.TRANSLATION_Y,
             -buttonH, btnLocation
         )
         mover.interpolator = AccelerateInterpolator(1f)
-        val rotator = ObjectAnimator.ofFloat(
+        val rotator = ofFloat(
             newButton, View.ROTATION,
             -360f, 0f
         )
@@ -242,7 +241,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun newCharactersOnClick(){
         binding.apply {
-            for ((data, button) in buttonsMap){
+            for ((_, button) in buttonsMap){
                 animeButton = button
 //                    rotater()
                 shower()
@@ -265,7 +264,7 @@ class MainActivity : AppCompatActivity() {
 
     //reset button state
     private fun enableButton(map: Map<LiveData<String>, Button>){
-        for ((liveData, button) in map){
+        for ((_, button) in map){
             button.isEnabled = true
             fadeIn(button)
         }

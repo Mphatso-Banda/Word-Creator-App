@@ -25,7 +25,6 @@ class WordsContainer {
         return list
     }
 
-
     private fun selectWord(dictionary: MutableList<String>): String {
         return dictionary.random()
     }
