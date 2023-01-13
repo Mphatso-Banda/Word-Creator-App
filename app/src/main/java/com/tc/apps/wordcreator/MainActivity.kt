@@ -94,7 +94,12 @@ class MainActivity : AppCompatActivity() {
                     value -> binding.score.text = getString(R.string.score, value)
                 }
                 level.observe(this@MainActivity){
+
                     newCharactersOnClick()
+                }
+
+                indicator.observe(this@MainActivity){
+                    value -> indication.text = value
                 }
             }
 

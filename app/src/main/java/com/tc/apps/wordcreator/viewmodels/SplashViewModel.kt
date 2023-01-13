@@ -114,7 +114,7 @@ class SplashViewModel() : ViewModel() {
         }
 
         if(words.size >= 5){
-            _totalWords.value = words.size
+            _totalWords.value = 5
         }
         else{
             _totalWords.value = words.size
