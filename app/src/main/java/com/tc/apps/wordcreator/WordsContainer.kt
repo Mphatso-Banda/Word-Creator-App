@@ -5,11 +5,11 @@ import java.util.*
 
 class WordsContainer {
 
-    var list = mutableListOf<Map<String, List<String>>>()
+    var list = mutableListOf<Map<String, MutableList<String>>>()
     private val MAX: Int = 256
 
 
-    fun getWords(dictionary: MutableList<String>): List<Map<String, List<String>>> {
+    fun getWords(dictionary: MutableList<String>): List<Map<String, MutableList<String>>> {
         val liwu = selectWord(dictionary)
 
         val count = IntArray(MAX)
@@ -25,7 +25,6 @@ class WordsContainer {
         return list
     }
 
-
     private fun selectWord(dictionary: MutableList<String>): String {
         return dictionary.random()
     }
@@ -35,8 +34,10 @@ class WordsContainer {
         val subString = mutableListOf<String>()
 
         val time = System.currentTimeMillis()
+
         for (word in dictionary) {
-            if (canMakeStr2(mawu, word.lowercase(Locale.getDefault()))) {
+            if (canMakeStr2(mawu.clone(), word.lowercase(Locale.getDefault()))) {
+                //Log.d("Generated container", word)
                 subString.add(word)
             }
 //            if (ifStringInString(mawu.lowercase(Locale.getDefault()), word.lowercase(Locale.getDefault()))) {

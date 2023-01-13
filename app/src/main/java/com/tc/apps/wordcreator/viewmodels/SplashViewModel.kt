@@ -10,14 +10,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tc.apps.wordcreator.SplashScreen
 import com.tc.apps.wordcreator.WordsContainer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.math.cos
 
 class SplashViewModel() : ViewModel() {
     private val wordsContainer = WordsContainer()
     private var words = listOf<String>()
     private val correctWords = mutableListOf<String>()
     private var scoreCount = 0
+    private var correctAttemps = 0
     private var dictionary = mutableListOf<String>()
     private var listOfLetters = mutableListOf<MutableLiveData<String>>()
 
@@ -30,6 +34,18 @@ class SplashViewModel() : ViewModel() {
         getBtnToDealWith(txt)
         return boo
     }
+
+    private val _level = MutableLiveData<Int>(0)
+    val level: LiveData<Int> get() = _level
+
+    private val _totalWords = MutableLiveData<Int>(0)
+    val totalWords: LiveData<Int> get() = _totalWords
+
+    private val _indicator = MutableLiveData<String>("")
+    val indicator: LiveData<String> get() = _indicator
+
+    private val _wordsGuessed = MutableLiveData<Int>(0)
+    val wordsGuessed: LiveData<Int> get() = _wordsGuessed
 
     private val _letter1 = MutableLiveData<String>()
     val letter1: LiveData<String> get() = _letter1
@@ -84,6 +100,7 @@ class SplashViewModel() : ViewModel() {
     fun getButtonLetter() {
         reset()
         correctWords.clear()
+        _wordsGuessed.value = 0
         val nextWord = shuffleWord()
 
         for((position, letter) in listOfLetters.shuffled().withIndex()){
@@ -95,6 +112,15 @@ class SplashViewModel() : ViewModel() {
                 letter.value = null
             }
         }
+
+        if(words.size >= 5){
+            _totalWords.value = 5
+        }
+        else{
+            _totalWords.value = words.size
+        }
+
+        _indicator.value = "${wordsGuessed.value} / ${totalWords.value}"
     }
 
     // shuffle the word
@@ -107,6 +133,7 @@ class SplashViewModel() : ViewModel() {
 
     //returns a word from Words Container
     private fun getData(): String {
+
         val word = wordsContainer.getWords(dictionary)
 
         val randomMap = word.random()
@@ -114,7 +141,7 @@ class SplashViewModel() : ViewModel() {
 
         val mapValue = randomMap.map { it.value }
         words = mapValue[0]
-        Log.d("WORD", mapKey[0].toString())
+        Log.d("WORD", mapKey[0])
         return mapKey[0]
    }
 
@@ -131,6 +158,13 @@ class SplashViewModel() : ViewModel() {
             2
         } else if(dictionary.contains(answer.toString().lowercase(Locale.getDefault()))){
             increasePoints()
+            if(_wordsGuessed.value == _totalWords.value?.minus(1)){
+                _wordsGuessed.value = 0
+                _level.value = _level.value?.plus(1)
+            }else{
+                _wordsGuessed.value = _wordsGuessed.value?.plus(1)
+                _indicator.value = "${wordsGuessed.value} / ${totalWords.value}"
+            }
             reset()
             1
         } else{
@@ -159,7 +193,6 @@ class SplashViewModel() : ViewModel() {
     private fun reset() {
         answer.clear()
         _finalAnswer.value = ""
-
     }
 
     private fun addButtonsToList(){
@@ -176,10 +209,9 @@ class SplashViewModel() : ViewModel() {
     init {
         dictionary = SplashScreen.getDictionary()
         addButtonsToList()
-        getButtonLetter()
-//        viewModelScope.launch{
-//
-//        }
+        viewModelScope.launch{
+            getButtonLetter()
+        }
         //btnList += listOf(letter1,letter2, letter3, letter4, letter5)
 //        shuffleWord()
     }
