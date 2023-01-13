@@ -1,8 +1,5 @@
 package com.tc.apps.wordcreator.viewmodels
 
-import android.app.Application
-import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,18 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tc.apps.wordcreator.SplashScreen
 import com.tc.apps.wordcreator.WordsContainer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.math.cos
 
 class SplashViewModel() : ViewModel() {
     private val wordsContainer = WordsContainer()
     private var words = listOf<String>()
     private val correctWords = mutableListOf<String>()
     private var scoreCount = 0
-    private var correctAttemps = 0
     private var dictionary = mutableListOf<String>()
     private var listOfLetters = mutableListOf<MutableLiveData<String>>()
 

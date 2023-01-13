@@ -26,6 +26,7 @@ class SplashScreen : AppCompatActivity() {
         var imageView = findViewById<ImageView>(R.id.imageView2)
 
         springAnimation(imageView, 50f)
+        springAnimation(imageView, 0f)
         //springAnimation.start()
         imageView.alpha = 0f
         imageView.animate().setDuration(1000).alpha(1f).withEndAction{

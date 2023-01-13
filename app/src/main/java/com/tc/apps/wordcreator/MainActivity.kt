@@ -97,7 +97,15 @@ class MainActivity : AppCompatActivity() {
                 setButtonState()
 
                 score.observe(this@MainActivity){
-                    value -> binding.score.text = "Score: ${value.toString()}"
+                    value -> binding.score.text = getString(R.string.score, value)
+                }
+
+                level.observe(this@MainActivity){
+                    newCharactersOnClick()
+                }
+
+                indicator.observe(this@MainActivity){
+                    value -> indication.text = value
                 }
             }
 
